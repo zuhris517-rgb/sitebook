@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SiteBook – Manajemen Proyek</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Semi+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0f4c5c"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="SiteBook"><link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{--bg:#ecefea;--card:#fff;--tx:#17262b;--mut:#5d6d72;--pri:#0f4c5c;--on:#fff;--acc:#f2b705;--ok:#2e7d4f;--warn:#b7791f;--bad:#c0392b;--line:#d9dfdb;--bar:#e3e8e4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1719;--card:#182326;--tx:#e8eeee;--mut:#93a5a9;--pri:#4fb3c8;--on:#08181c;--acc:#f2b705;--ok:#5cc489;--warn:#e3a94a;--bad:#ef7a6c;--line:#263438;--bar:#243236}}
+:root[data-theme="dark"]{--bg:#0f1719;--card:#182326;--tx:#e8eeee;--mut:#93a5a9;--pri:#4fb3c8;--on:#08181c;--ok:#5cc489;--warn:#e3a94a;--bad:#ef7a6c;--line:#263438;--bar:#243236}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{color-scheme:light dark;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 15px/1.45 Barlow,system-ui,sans-serif;max-width:560px;margin-inline:auto;padding-bottom:84px}
+h1,h2,h3{font-family:"Barlow Semi Condensed",Barlow,sans-serif;margin:0;letter-spacing:.2px}
+header{background:var(--pri);color:var(--on);padding:18px 16px 16px}
+header h1{font-size:22px}header p{margin:2px 0 0;opacity:.85;font-size:13px}
+main{padding:14px 14px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.k{color:var(--mut);font-size:12.5px}.v{font:700 20px "Barlow Semi Condensed",sans-serif}
+.bar{height:8px;background:var(--bar);border-radius:4px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--pri)}
+.bar.a i{background:var(--acc)}
+.row{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.seg{display:flex;background:var(--bar);border-radius:9px;padding:3px;margin-bottom:12px}
+.seg button{flex:1;border:0;background:none;color:var(--mut);font:600 14px Barlow,sans-serif;padding:8px 4px;border-radius:7px}
+.seg button.on{background:var(--card);color:var(--tx);box-shadow:0 1px 2px #0002}
+nav{position:fixed;bottom:0;left:0;right:0;max-width:560px;margin:auto;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+nav button{flex:1;border:0;background:none;color:var(--mut);font:500 11.5px Barlow,sans-serif;padding:9px 0 8px}
+nav button svg{display:block;margin:0 auto 2px;width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8}
+nav button.on{color:var(--pri);font-weight:600}
+.btn{border:0;background:var(--pri);color:var(--on);font:600 14px Barlow,sans-serif;padding:10px 14px;border-radius:8px}
+.btn.g{background:var(--bar);color:var(--tx)}.btn.s{padding:6px 10px;font-size:13px}
+.tag{font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--bar)}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.sub{font:600 13px Barlow,sans-serif;color:var(--mut);margin:14px 2px 6px}
+.gantt{overflow-x:auto;padding-bottom:4px}
+.gw{display:grid;grid-template-columns:repeat(17,26px);gap:0;min-width:442px;position:relative}
+.gh{font-size:10.5px;color:var(--mut);text-align:center;border-left:1px solid var(--line);padding:2px 0}
+.gh.now{background:color-mix(in srgb,var(--acc) 30%,transparent);color:var(--tx);font-weight:600}
+.gb{height:16px;border-radius:4px;background:var(--bar);position:relative;overflow:hidden;margin:3px 0 12px}
+.gb i{position:absolute;inset:0 auto 0 0;background:var(--pri)}
+.gl{font-size:13px;font-weight:500;margin-top:8px;position:sticky;left:0}
+.step{display:flex;gap:12px}
+.dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;font-size:13px;font-weight:700;background:var(--card)}
+.dot.s1{border-color:var(--acc);background:var(--acc);color:#1b1b1b}.dot.s2{border-color:var(--ok);background:var(--ok);color:#fff}
+.sl{width:2px;background:var(--line);margin:0 12px;flex:none}
+.sb{flex:1;padding-bottom:16px;text-align:left;border:0;background:none;color:inherit;font:inherit;padding-top:0}
+.modal{position:fixed;inset:0;background:#000a;display:none;align-items:flex-end;z-index:20}
+.modal.on{display:flex}
+.sheet{background:var(--card);width:100%;max-width:560px;margin:auto;border-radius:16px 16px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:88vh;overflow:auto}
+.sheet label{display:block;font-size:12.5px;color:var(--mut);margin:10px 0 3px}
+.sheet input,.sheet select,.sheet textarea{width:100%;font:16px Barlow,sans-serif;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--tx)}
+.fab{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:6;border-radius:99px;padding:12px 18px;box-shadow:0 3px 10px #0004}
+.empty{color:var(--mut);text-align:center;padding:24px 8px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}td,th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:right}td:first-child,th:first-child{text-align:left}th{color:var(--mut);font-weight:500;font-size:12px}
+.ro .adm{display:none!important}.ph{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ph img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;background:var(--bar)}.sc text{fill:var(--mut);font-size:10px}
+</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+<header><h1 id="pn" onclick="go('proyek')" style="cursor:pointer">SiteBook</h1><p id="ps"></p><p id="us" style="margin-top:6px;font-weight:600"></p></header>
+<main id="app"></main>
+<nav id="nav"></nav>
+<div class="modal" id="md"><div class="sheet" id="sh"></div></div>
+<script>
+var START=new Date("2026-09-21T00:00:00"),TODAY=new Date("2026-11-20T00:00:00"),WEEKS=17,KEY="sitebook-v2";
+var D0={nama:"Rumah Tinggal 2 Lantai – Type 120",lokasi:"Sidoarjo, Jawa Timur",
+rab:[
+{id:1,kat:"Persiapan",nama:"Pembersihan dan pengukuran lahan",vol:150,sat:"m²",hrg:25000,real:100},
+{id:2,kat:"Pondasi",nama:"Galian tanah pondasi",vol:48,sat:"m³",hrg:95000,real:100},
+{id:3,kat:"Pondasi",nama:"Pondasi batu kali",vol:36,sat:"m³",hrg:1150000,real:100},
+{id:4,kat:"Struktur",nama:"Beton K-250 kolom dan balok",vol:42,sat:"m³",hrg:1850000,real:75},
+{id:5,kat:"Struktur",nama:"Pembesian",vol:5200,sat:"kg",hrg:16500,real:70},
+{id:6,kat:"Struktur",nama:"Plat lantai 2",vol:120,sat:"m²",hrg:520000,real:30},
+{id:7,kat:"Dinding",nama:"Pasangan bata ringan",vol:380,sat:"m²",hrg:165000,real:20},
+{id:8,kat:"Atap",nama:"Rangka baja ringan dan genteng",vol:140,sat:"m²",hrg:430000,real:0},
+{id:9,kat:"MEP",nama:"Instalasi listrik dan plumbing",vol:1,sat:"ls",hrg:68000000,real:0},
+{id:10,kat:"Finishing",nama:"Keramik, cat, plafon",vol:240,sat:"m²",hrg:390000,real:0}],
+tasks:[
+{id:1,nama:"Persiapan lahan",m:1,d:2,p:100},{id:2,nama:"Pondasi",m:2,d:3,p:100},
+{id:3,nama:"Struktur lantai 1",m:4,d:5,p:85},{id:4,nama:"Struktur lantai 2",m:8,d:4,p:35},
+{id:5,nama:"Pasangan dinding",m:10,d:4,p:15},{id:6,nama:"Atap",m:12,d:3,p:0},
+{id:7,nama:"Instalasi MEP",m:12,d:4,p:0},{id:8,nama:"Finishing",m:14,d:4,p:0}],
+flow:[
+{n:"Desain dan gambar kerja",pic:"Arsitek",s:2},{n:"Perizinan (PBG)",pic:"Admin",s:2},
+{n:"Pengadaan material utama",pic:"Logistik",s:1},{n:"Pelaksanaan struktur",pic:"Pelaksana",s:1},
+{n:"Pemeriksaan mutu (QC)",pic:"Pengawas",s:0},{n:"Serah terima dan retensi",pic:"Manajer proyek",s:0}],
+mat:[
+{id:1,nama:"Semen 50 kg",sat:"zak",rc:600,ord:520,pk:410},{id:2,nama:"Pasir pasang",sat:"m³",rc:90,ord:80,pk:61},
+{id:3,nama:"Besi beton D13",sat:"batang",rc:420,ord:380,pk:322},{id:4,nama:"Bata ringan",sat:"m³",rc:34,ord:12,pk:6},
+{id:5,nama:"Batu kali",sat:"m³",rc:40,ord:40,pk:38}],
+lab:[
+{id:1,per:"Mandor",jml:1,up:225000,hr:44},{id:2,per:"Tukang batu",jml:6,up:185000,hr:40},
+{id:3,per:"Tukang besi",jml:3,up:190000,hr:32},{id:4,per:"Kenek",jml:8,up:140000,hr:40}],
+daily:[
+{t:"2026-10-27",c:"Cerah",w:16,u:"Pembesian kolom lantai 2 dan bekisting balok",k:""},
+{t:"2026-10-29",c:"Hujan",w:11,u:"Pekerjaan ditunda siang hari, bekisting dilanjutkan",k:"Hujan deras sejak pukul 13.00"},
+{t:"2026-11-03",c:"Cerah",w:17,u:"Pengecoran kolom lantai 2 (8 m³)",k:""},
+{t:"2026-11-10",c:"Berawan",w:15,u:"Pembesian plat lantai 2",k:"Besi D13 terlambat datang"},
+{t:"2026-11-16",c:"Cerah",w:17,u:"Bekisting plat lantai 2 selesai 60%",k:""},
+{t:"2026-11-17",c:"Cerah",w:18,u:"Pembesian plat lantai 2 selesai, mulai pasang bata lantai 1",k:""},
+{t:"2026-11-18",c:"Berawan",w:18,u:"Pasangan bata ringan sisi timur",k:"Stok bata ringan menipis"},
+{t:"2026-11-19",c:"Cerah",w:18,u:"Pasangan bata ringan sisi utara, cek elevasi plat",k:""}]};
+var ALL={},ORDER=[],CUR="p1",S,SAVED=null;try{SAVED=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+function iso(d){return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)}
+function mk(id,nama,lok,st,rb,tk,fl,mt,lb,dy){var p={id:id,nama:nama,lokasi:lok,start:st,hist:{},foto:[],
+rab:rb.map(function(r,i){return{id:i+1,kat:r[0],nama:r[1],vol:r[2],sat:r[3],hrg:r[4],real:r[5]}}),
+tasks:tk.map(function(t,i){return{id:i+1,nama:t[0],m:t[1],d:t[2],p:t[3]}}),
+flow:D0.flow.map(function(f,i){return{n:f.n,pic:f.pic,s:fl[i]}}),
+mat:mt.map(function(m,i){return{id:i+1,nama:m[0],sat:m[1],rc:m[2],ord:m[3],pk:m[4]}}),
+lab:lb.map(function(l,i){return{id:i+1,per:l[0],jml:l[1],up:l[2],hr:l[3]}}),
+daily:dy.map(function(d){var t=new Date(TODAY);t.setDate(t.getDate()-d[0]);return{t:iso(t),c:d[1],w:d[2],u:d[3],k:d[4],p:id}})};
+var o=S;S=p;var w=cw(),a=actual();S=o;for(var i=1;i<w&&i<=WEEKS;i++)p.hist[i]=Math.round(a*Math.pow(i/w,1.2)*10)/10;return p}
+D0.id="p1";D0.start="2026-09-21";D0.foto=[];D0.hist={1:3,2:8,3:14,4:19,5:25,6:30,7:34,8:37};
+ALL.p1=JSON.parse(JSON.stringify(D0));
+ALL.p2=mk("p2","Ruko 3 Lantai","Jl. Raya Waru, Sidoarjo","2026-08-17",[["Struktur","Beton K-300 struktur",118,"m³",1950000,100],["Struktur","Pembesian",14800,"kg",16500,100],["Dinding","Bata ringan dan plester",920,"m²",205000,90],["Atap","Dak beton dan waterproofing",150,"m²",610000,100],["Finishing","Keramik, cat, plafon, rolling door",620,"m²",420000,40]],[["Pondasi dan sloof",1,3,100],["Struktur 3 lantai",4,6,100],["Dinding dan plesteran",8,5,90],["Atap dak",12,2,100],["Instalasi MEP",10,5,70],["Finishing",14,4,40]],[2,2,2,1,1,0],[["Semen 50 kg","zak",2400,2300,2110],["Besi beton D16","batang",1300,1250,1180],["Keramik 60x60","m²",620,300,40]],[["Mandor",2,230000,92],["Tukang batu",14,190000,70],["Tukang besi",6,195000,60],["Kenek",16,145000,80]],[[1,"Cerah",38,"Plesteran lantai 2 dan instalasi listrik lantai 3",""],[2,"Cerah",36,"Pemasangan waterproofing dak atap","Pasokan keramik tertunda 1 hari"],[3,"Hujan",24,"Pekerjaan dalam ruang: instalasi pipa lantai 1",""]]);
+ALL.p3=mk("p3","Jalan Lingkungan Perumahan","Griya Asri, Gedangan","2026-10-19",[["Persiapan","Pembersihan dan pengukuran",2400,"m²",18000,100],["Tanah","Galian dan urugan sirtu",1200,"m³",165000,100],["Perkerasan","Lapis pondasi agregat kelas A",480,"m³",410000,40],["Perkerasan","Paving block K-300",2200,"m²",235000,10],["Drainase","Saluran U-ditch",620,"m",640000,55]],[["Persiapan",1,1,100],["Galian dan urugan",2,3,100],["Drainase",3,5,55],["Lapis pondasi",5,3,40],["Pemasangan paving",8,6,0],["Marka dan perapian",14,3,0]],[2,2,2,1,0,0],[["Paving block K-300","m²",2200,600,180],["Sirtu","m³",1500,1250,980],["U-ditch 40x50","buah",520,300,170]],[["Mandor",1,220000,28],["Operator alat berat",2,300000,20],["Tukang",8,180000,22],["Kenek",10,140000,24]],[[1,"Cerah",22,"Pemasangan U-ditch segmen C",""],[2,"Berawan",21,"Pemadatan lapis pondasi segmen A",""],[4,"Hujan",9,"Pekerjaan berhenti sebagian","Genangan di area galian"]]);
+ALL.p4=mk("p4","Gudang Pabrik 1.200 m²","Kawasan Industri Tanggulangin","2026-09-07",[["Pondasi","Bore pile dan pile cap",96,"titik",9800000,100],["Struktur","Kolom dan portal baja WF",58000,"kg",24500,100],["Lantai","Lantai kerja floor hardener",1200,"m²",285000,70],["Atap","Atap spandek dan insulasi",1350,"m²",330000,35],["Dinding","Dinding panel dan roller door",640,"m²",395000,0]],[["Pondasi bore pile",1,4,100],["Fabrikasi baja",3,5,100],["Ereksi portal",6,5,100],["Lantai kerja",9,4,70],["Atap",11,4,35],["Dinding dan pintu",13,4,0]],[2,2,2,1,1,0],[["Baja WF 400","kg",58000,58000,57200],["Spandek 0,45","m²",1350,500,320],["Beton K-300","m³",260,160,148]],[["Mandor",2,235000,66],["Welder",10,260000,48],["Tukang",12,190000,44],["Kenek",14,145000,50]],[[1,"Cerah",38,"Pemasangan purlin atap bentang B",""],[2,"Cerah",36,"Pengecoran lantai kerja zona 3",""],[3,"Berawan",35,"Pemasangan bracing akhir dan uji torsi baut","Crane sewaan terlambat 3 jam"]]);
+ALL.p5=mk("p5","Renovasi SDN Krian 2","Krian, Sidoarjo","2026-10-05",[["Pembongkaran","Bongkar plafon dan atap lama",420,"m²",85000,100],["Atap","Rangka baja ringan dan genteng metal",420,"m²",395000,95],["Dinding","Perbaikan plester dan cat",1150,"m²",78000,75],["Lantai","Keramik 40x40",360,"m²",275000,40],["Sanitasi","Toilet 4 unit",4,"unit",21500000,0]],[["Pembongkaran",1,2,100],["Rangka atap",2,3,100],["Penutup atap",4,3,90],["Perbaikan dinding",5,4,75],["Pemasangan lantai",7,3,40],["Sanitasi",8,4,0],["Cat dan serah terima",11,3,0]],[2,2,2,1,0,0],[["Baja ringan C75","batang",260,260,255],["Genteng metal","lembar",1050,1050,960],["Keramik 40x40","dus",250,120,60]],[["Mandor",1,215000,32],["Tukang atap",5,200000,24],["Tukang",6,180000,26],["Kenek",6,140000,28]],[[1,"Cerah",15,"Plester ruang kelas 3 dan 4",""],[2,"Cerah",14,"Genteng metal sisi barat selesai",""],[5,"Hujan",8,"Pekerjaan atap dihentikan","Hujan, area atap licin"]]);
+ORDER=["p1","p2","p3","p4","p5"];
+if(SAVED&&SAVED.all){Object.keys(SAVED.all).forEach(function(k){ALL[k]=SAVED.all[k];if(ORDER.indexOf(k)<0)ORDER.push(k)});CUR=SAVED.cur}
+S=ALL[CUR]||ALL.p1;CUR=S.id;
+var EDIT=true,DB=null,DL=null,AS=null,ME=null,UU=null,ROLE="",PROF={};
+function core(p){p=p||S;return{id:p.id,start:p.start,rab:p.rab,tasks:p.tasks,flow:p.flow,mat:p.mat,lab:p.lab,hist:p.hist,nama:p.nama,lokasi:p.lokasi}}
+function pdoc(id){return id=="p1"?"data":id}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify({cur:CUR,order:ORDER,all:ALL}))}catch(e){}}
+function save(){persist();if(DB&&EDIT)DB.doc("proyek/"+pdoc(S.id)).set(core()).catch(function(){})}
+var $=function(s){return document.querySelector(s)};
+var rp=function(n){return"Rp "+Math.round(n).toLocaleString("id-ID")};
+var jt=function(n){return n>=1e9?(n/1e9).toFixed(2).replace(".",",")+" M":n>=1e6?(n/1e6).toFixed(1).replace(".",",")+" jt":rp(n)};
+var pc=function(n){return Math.round(n)+"%"};
+var tab="proyek",sub={jadwal:0,lap:0,res:0};
+function cw(){return Math.floor((TODAY-new Date(S.start+"T00:00:00"))/864e5/7)+1}
+function actual(){var a=0,b=0;S.tasks.forEach(function(t){a+=t.p*t.d;b+=t.d});return b?a/b:0}
+function planned(){return plannedAt(cw())}function plannedAt(w){var a=0,b=0;S.tasks.forEach(function(t){a+=100*t.d*Math.max(0,Math.min(1,(w-t.m+1)/t.d));b+=t.d});return b?a/b:0}
+function rabTot(){return S.rab.reduce(function(a,r){return a+r.vol*r.hrg},0)}
+function rabReal(){return S.rab.reduce(function(a,r){return a+r.vol*r.hrg*r.real/100},0)}
+function bar(p,c){return'<div class="bar '+(c||"")+'"><i style="width:'+Math.max(0,Math.min(100,p||0))+'%"></i></div>'}
+var IC={proyek:'<path d="M3 21V9l6-4v16M9 21V3l6 4v14M15 21V10l6 3v8"/>',home:'<path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/>',rab:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',jadwal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',lap:'<path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h7"/>',res:'<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>'};
+var NAMES={proyek:"Proyek",home:"Beranda",rab:"RAB",jadwal:"Jadwal",lap:"Laporan",res:"Sumber"};
+function nav(){$("#nav").innerHTML=Object.keys(NAMES).map(function(k){return'<button class="'+(k==tab?"on":"")+'" onclick="go(\''+k+'\')"><svg viewBox="0 0 24 24">'+IC[k]+'</svg>'+NAMES[k]+'</button>'}).join("")}
+function go(t){tab=t;scrollTo(0,0);render()}
+function segs(key,items){return'<div class="seg">'+items.map(function(n,i){return'<button class="'+(sub[key]==i?"on":"")+'" onclick="sub.'+key+'='+i+';render()">'+n+'</button>'}).join("")+'</div>'}
+function fab(label,fn){var any=fn=="addDaily()"||fn=="addFoto()";return'<button class="btn fab'+(any?"":" adm")+'" onclick="'+fn+'">+ '+label+'</button>'}
+/* modal form */
+var FORM;
+function form(title,fields,cb,any){if(!EDIT&&!any)return;FORM={f:fields,cb:cb};
+$("#sh").innerHTML='<h2>'+title+'</h2>'+fields.map(function(f,i){var v=f.v==null?"":f.v;var el=f.o?'<select id="f'+i+'">'+f.o.map(function(o){return'<option'+(o==v?" selected":"")+'>'+o+'</option>'}).join("")+'</select>':f.ta?'<textarea id="f'+i+'" rows="3">'+v+'</textarea>':'<input id="f'+i+'" type="'+(f.t||"text")+'" value="'+v+'" '+(f.t=="number"?'inputmode="decimal"':f.t=="file"?'accept="image/*"':"")+'>';return'<label for="f'+i+'">'+f.l+'</label>'+el}).join("")+'<div class="row" style="margin-top:16px"><button class="btn g" onclick="closeM()" style="flex:1">Batal</button><button class="btn" onclick="submitF()" style="flex:1">Simpan</button></div>';
+$("#md").classList.add("on")}
+function closeM(){$("#md").classList.remove("on")}
+function submitF(){var vals=FORM.f.map(function(f,i){if(f.t=="file")return $("#f"+i).files[0];var v=$("#f"+i).value;return f.t=="number"?(parseFloat(v)||0):v.trim()});FORM.cb(vals);save();closeM();render()}
+$("#md").addEventListener("click",function(e){if(e.target.id=="md")closeM()});
+/* views */
+function home(){return home0()+exportCard()}function home0(){var a=actual(),p=planned(),dv=a-p,T=rabTot(),R=rabReal();
+var done=S.flow.filter(function(f){return f.s==2}).length;
+var lowM=S.mat.filter(function(m){return m.ord-m.pk<=m.rc*0.05||m.ord-m.pk<=0});
+var kend=S.daily.filter(function(d){return d.k}).sort(function(x,y){return y.t<x.t?-1:1}).slice(0,3);
+return'<div class="card"><div class="row"><span class="k">Progres fisik keseluruhan</span><span class="tag">Minggu ke-'+cw()+' dari '+WEEKS+'</span></div><div class="v" style="font-size:34px">'+pc(a)+'</div>'+bar(a,"a")+'<div class="k" style="margin-top:8px">Rencana minggu ini '+pc(p)+' · <b class="'+(dv<-2?"bad":dv<0?"warn":"ok")+'">'+(dv>=0?"lebih cepat ":"terlambat ")+Math.abs(dv).toFixed(1).replace(".",",")+"%</b></div></div>"+
+'<div class="grid"><div class="card"><div class="k">Total RAB</div><div class="v">'+jt(T)+'</div></div><div class="card"><div class="k">Realisasi biaya</div><div class="v">'+jt(R)+'</div>'+bar(R/T*100)+'</div><div class="card"><div class="k">Pekerja hari ini</div><div class="v">'+(S.daily.length?S.daily.slice().sort(function(x,y){return y.t<x.t?-1:1})[0].w:0)+' orang</div></div><div class="card"><div class="k">Alur kerja</div><div class="v">'+done+' / '+S.flow.length+' tahap</div>'+bar(done/S.flow.length*100)+'</div></div>'+
+'<div class="sub">Perlu perhatian</div>'+
+(lowM.length?lowM.map(function(m){return'<div class="card row"><span>Stok <b>'+m.nama+'</b> tinggal '+(m.ord-m.pk)+' '+m.sat+'</span><span class="tag bad">Pesan</span></div>'}).join(""):"")+
+kend.map(function(d){return'<div class="card"><div class="k">'+fd(d.t)+'</div>'+d.k+'</div>'}).join("")||'<div class="empty">Belum ada kendala tercatat.</div>'}
+function fd(t){return new Date(t+"T00:00:00").toLocaleDateString("id-ID",{weekday:"short",day:"numeric",month:"short",year:"numeric"})}
+function rab(){var cats=[];S.rab.forEach(function(r){if(cats.indexOf(r.kat)<0)cats.push(r.kat)});
+var T=rabTot(),oh=T*0.1,sub1=T+oh,ppn=sub1*0.11;
+var h='<div class="card"><table><tr><td>Subtotal pekerjaan</td><td>'+rp(T)+'</td></tr><tr><td>Overhead dan profit 10%</td><td>'+rp(oh)+'</td></tr><tr><td>PPN 11%</td><td>'+rp(ppn)+'</td></tr><tr><td><b>Total kontrak</b></td><td><b>'+rp(sub1+ppn)+'</b></td></tr></table></div>';
+cats.forEach(function(c){var items=S.rab.filter(function(r){return r.kat==c}),t=items.reduce(function(a,r){return a+r.vol*r.hrg},0);
+h+='<div class="sub row"><span>'+c+'</span><span>'+jt(t)+'</span></div>';
+items.forEach(function(r){h+='<div class="card" onclick="editRab('+r.id+')"><div class="row"><b>'+r.nama+'</b><span class="k">'+pc(r.real)+'</span></div><div class="k">'+r.vol.toLocaleString("id-ID")+' '+r.sat+' × '+rp(r.hrg)+'</div><div class="row" style="margin-top:2px"><span class="v" style="font-size:17px">'+rp(r.vol*r.hrg)+'</span></div>'+bar(r.real)+'</div>'})});
+return h+fab("Item RAB","addRab()")}
+function rabF(r){return[{l:"Kategori",v:r.kat},{l:"Uraian pekerjaan",v:r.nama},{l:"Volume",t:"number",v:r.vol},{l:"Satuan",v:r.sat},{l:"Harga satuan (Rp)",t:"number",v:r.hrg},{l:"Realisasi fisik (%)",t:"number",v:r.real}]}
+function addRab(){form("Tambah item RAB",rabF({kat:"",nama:"",vol:"",sat:"",hrg:"",real:0}),function(v){if(!v[1])return;S.rab.push({id:Date.now(),kat:v[0]||"Lainnya",nama:v[1],vol:v[2],sat:v[3],hrg:v[4],real:Math.min(100,v[5])})})}
+function editRab(id){var r=S.rab.filter(function(x){return x.id==id})[0];form("Ubah item RAB",rabF(r),function(v){r.kat=v[0];r.nama=v[1];r.vol=v[2];r.sat=v[3];r.hrg=v[4];r.real=Math.min(100,v[5])})}
+function jadwal(){var h=segs("jadwal",["Jadwal","Alur kerja","Kurva-S"]);
+if(sub.jadwal==0){var w=cw();h+='<div class="card gantt"><div class="gw">';
+for(var i=1;i<=WEEKS;i++)h+='<div class="gh'+(i==w?" now":"")+'">'+i+'</div>';
+S.tasks.forEach(function(t){h+='<div class="gl" style="grid-column:1/-1">'+t.nama+' <span class="k">'+pc(t.p)+'</span></div><div class="gb" style="grid-column:'+t.m+'/span '+t.d+'"><i style="width:'+t.p+'%"></i></div>'});
+h+='</div></div><div class="k" style="margin:0 2px 10px">Kolom = minggu proyek (mulai 21 Sep 2026). Sorotan kuning = minggu ini.</div>';
+S.tasks.forEach(function(t){var late=t.m+t.d-1<w&&t.p<100,run=t.m<=w&&t.p<100;h+='<div class="card"><div class="row"><b>'+t.nama+'</b><span class="tag '+(late?"bad":t.p==100?"ok":run?"warn":"")+'">'+(late?"Terlambat":t.p==100?"Selesai":run?"Berjalan":"Belum mulai")+'</span></div><div class="k">Minggu '+t.m+'–'+(t.m+t.d-1)+'</div>'+bar(t.p)+'<div class="row" style="margin-top:8px"><button class="btn g s adm" onclick="prog('+t.id+',-10)">−10%</button><b>'+pc(t.p)+'</b><button class="btn s adm" onclick="prog('+t.id+',10)">+10%</button></div></div>'});
+h+=fab("Tugas","addTask()")}
+else if(sub.jadwal==2){h+=scurve()}else{h+='<div class="k" style="margin:0 2px 10px">Ketuk tahap untuk mengubah status.</div><div class="card">';
+S.flow.forEach(function(f,i){var st=["Belum mulai","Berjalan","Selesai"][f.s];h+='<div class="step"><div style="display:flex;flex-direction:column;align-items:center"><div class="dot s'+f.s+'">'+(f.s==2?"✓":i+1)+'</div>'+(i<S.flow.length-1?'<div class="sl" style="flex:1;margin:0"></div>':"")+'</div><button class="sb" onclick="flow('+i+')"><b>'+f.n+'</b><div class="k">'+f.pic+' · '+st+'</div></button></div>'});h+='</div>'}
+return h}
+function prog(id,d){if(!EDIT)return;var t=S.tasks.filter(function(x){return x.id==id})[0];t.p=Math.max(0,Math.min(100,t.p+d));S.hist[cw()]=Math.round(actual()*10)/10;save();render()}
+function flow(i){if(!EDIT)return;S.flow[i].s=(S.flow[i].s+1)%3;save();render()}
+function addTask(){form("Tambah tugas jadwal",[{l:"Nama tugas",v:""},{l:"Minggu mulai (1–17)",t:"number",v:1},{l:"Durasi (minggu)",t:"number",v:2}],function(v){if(!v[0])return;var m=Math.max(1,Math.min(WEEKS,v[1]||1));S.tasks.push({id:Date.now(),nama:v[0],m:m,d:Math.max(1,Math.min(WEEKS-m+1,v[2]||1)),p:0})})}
+function mondayOf(t){var d=new Date(t+"T00:00:00"),g=(d.getDay()+6)%7;d.setDate(d.getDate()-g);return d}
+function agg(list){var n=list.length,ws=list.reduce(function(a,d){return a+d.w},0);return{n:n,avg:n?Math.round(ws/n):0,md:ws,k:list.filter(function(d){return d.k}),rain:list.filter(function(d){return d.c=="Hujan"}).length}}
+function sumCard(title,list){var g=agg(list);return'<div class="card"><b>'+title+'</b><div class="grid" style="margin-top:8px"><div><div class="k">Hari dilaporkan</div><div class="v">'+g.n+'</div></div><div><div class="k">Rata-rata pekerja</div><div class="v">'+g.avg+'</div></div><div><div class="k">Total orang-hari</div><div class="v">'+g.md+'</div></div><div><div class="k">Hari hujan</div><div class="v">'+g.rain+'</div></div></div>'+(g.k.length?'<div class="sub" style="margin-top:10px">Kendala</div>'+g.k.map(function(d){return'<div class="k">• '+d.k+' <span>('+d.t.slice(8)+'/'+d.t.slice(5,7)+')</span></div>'}).join(""):'<div class="k" style="margin-top:8px">Tidak ada kendala.</div>')+'</div>'}
+function lap(){var h=segs("lap",["Harian","Mingguan","Bulanan","Foto"]),L=S.daily.slice().sort(function(a,b){return b.t<a.t?-1:1});
+if(!L.length)return h+'<div class="empty">Belum ada laporan. Ketuk tombol Laporan untuk menambah.</div>'+fab("Laporan","addDaily()");
+if(sub.lap==0){L.forEach(function(d){h+='<div class="card"><div class="row"><b>'+fd(d.t)+'</b><span class="tag">'+d.c+' · '+d.w+' pekerja'+(d.by&&PROF[d.by]&&PROF[d.by].name?' · '+esc(PROF[d.by].name):'')+'</span></div><div style="margin-top:4px">'+d.u+'</div>'+(d.k?'<div class="bad" style="margin-top:4px;font-size:13.5px">Kendala: '+d.k+'</div>':"")+'</div>'});h+=fab("Laporan","addDaily()")}
+else if(sub.lap==1){var g={};L.forEach(function(d){var m=mondayOf(d.t),k=m.toISOString?m.getFullYear()+"-"+(m.getMonth()+1)+"-"+m.getDate():"";(g[k]=g[k]||{m:m,l:[]}).l.push(d)});
+Object.keys(g).sort(function(a,b){return g[b].m-g[a].m}).forEach(function(k){var m=g[k].m,e=new Date(m);e.setDate(e.getDate()+6);var f=function(x){return x.toLocaleDateString("id-ID",{day:"numeric",month:"short"})};h+=sumCard("Minggu "+f(m)+" – "+f(e),g[k].l)})}
+else if(sub.lap==3){h+=fotos()}else{var g2={};L.forEach(function(d){(g2[d.t.slice(0,7)]=g2[d.t.slice(0,7)]||[]).push(d)});
+Object.keys(g2).sort().reverse().forEach(function(k){var n=new Date(k+"-01T00:00:00").toLocaleDateString("id-ID",{month:"long",year:"numeric"});h+=sumCard(n,g2[k])});
+h+='<div class="card"><b>Posisi proyek saat ini</b><div class="k" style="margin-top:4px">Progres fisik '+pc(actual())+' · realisasi biaya '+jt(rabReal())+' dari '+jt(rabTot())+'</div>'+bar(actual(),"a")+'</div>'}
+return h}
+function addDaily(){form("Laporan harian",[{l:"Tanggal",t:"date",v:"2026-11-20"},{l:"Cuaca",o:["Cerah","Berawan","Hujan"],v:"Cerah"},{l:"Jumlah pekerja",t:"number",v:""},{l:"Pekerjaan hari ini",ta:1,v:""},{l:"Kendala (kosongkan jika tidak ada)",ta:1,v:""}],function(v){if(!v[0]||!v[3])return;var d={t:v[0],c:v[1],w:v[2],u:v[3],k:v[4],by:(ME&&ME.id)||"",p:S.id};if(DB)DB.collection("laporan").doc(S.id=="p1"?v[0]:S.id+"_"+v[0]).set(d).catch(function(){});S.daily=S.daily.filter(function(x){return x.t!=v[0]});S.daily.push(d)},true)}
+function res(){var h=segs("res",["Material","Tenaga kerja"]);
+if(sub.res==0){S.mat.forEach(function(m){var st=m.ord-m.pk,u=m.pk/m.rc*100,low=st<=m.rc*0.05;h+='<div class="card"><div class="row"><b>'+m.nama+'</b><span class="tag '+(low?"bad":"")+'">Stok '+st+' '+m.sat+'</span></div><div class="k">Rencana '+m.rc+' · dipesan '+m.ord+' · terpakai '+m.pk+' '+m.sat+'</div>'+bar(u)+'<div class="row" style="margin-top:8px"><span class="k">Terpakai '+pc(u)+' dari rencana</span><span><button class="btn g s adm" onclick="useMat('+m.id+')">Catat pakai</button> <button class="btn s adm" onclick="ordMat('+m.id+')">Catat datang</button></span></div></div>'});h+=fab("Material","addMat()")}
+else{var tot=S.lab.reduce(function(a,l){return a+l.jml*l.up*l.hr},0),hd=S.lab.reduce(function(a,l){return a+l.jml},0);
+h+='<div class="grid"><div class="card"><div class="k">Total tenaga kerja</div><div class="v">'+hd+' orang</div></div><div class="card"><div class="k">Biaya upah</div><div class="v">'+jt(tot)+'</div></div></div><div class="card"><table><tr><th>Posisi</th><th>Orang</th><th>Hari</th><th>Biaya</th></tr>'+S.lab.map(function(l){return'<tr onclick="editLab('+l.id+')"><td>'+l.per+'</td><td>'+l.jml+'</td><td>'+l.hr+'</td><td>'+jt(l.jml*l.up*l.hr)+'</td></tr>'}).join("")+'</table></div><div class="k" style="margin:0 2px">Ketuk baris untuk mengubah jumlah, upah harian, atau hari kerja.</div>'+fab("Posisi","addLab()")}
+return h}
+function mm(id){return S.mat.filter(function(x){return x.id==id})[0]}
+function useMat(id){var m=mm(id);form("Pemakaian "+m.nama,[{l:"Jumlah dipakai ("+m.sat+")",t:"number",v:""}],function(v){m.pk=Math.min(m.ord,m.pk+v[0])})}
+function ordMat(id){var m=mm(id);form("Material datang: "+m.nama,[{l:"Jumlah diterima ("+m.sat+")",t:"number",v:""}],function(v){m.ord+=v[0]})}
+function addMat(){form("Tambah material",[{l:"Nama material",v:""},{l:"Satuan",v:""},{l:"Kebutuhan sesuai RAB",t:"number",v:""}],function(v){if(!v[0])return;S.mat.push({id:Date.now(),nama:v[0],sat:v[1],rc:v[2],ord:0,pk:0})})}
+function labF(l){return[{l:"Posisi",v:l.per},{l:"Jumlah orang",t:"number",v:l.jml},{l:"Upah per hari (Rp)",t:"number",v:l.up},{l:"Total hari kerja",t:"number",v:l.hr}]}
+function addLab(){form("Tambah posisi tenaga kerja",labF({per:"",jml:"",up:"",hr:0}),function(v){if(!v[0])return;S.lab.push({id:Date.now(),per:v[0],jml:v[1],up:v[2],hr:v[3]})})}
+function editLab(id){var l=S.lab.filter(function(x){return x.id==id})[0];form("Ubah "+l.per,labF(l),function(v){l.per=v[0];l.jml=v[1];l.up=v[2];l.hr=v[3]})}
+function render(){$("#pn").textContent=tab=="proyek"?"SiteBook · Semua proyek":S.nama+" ▾";$("#ps").textContent=(tab=="proyek"?ORDER.length+" proyek":S.lokasi)+" · "+TODAY.toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
+document.body.classList.toggle("ro",!EDIT);$("#us").textContent=ME?ME.name+" · "+ROLE:"Mode lokal (data di perangkat ini)";
+$("#app").innerHTML=({proyek:proyek,home:home,rab:rab,jadwal:jadwal,lap:lap,res:res})[tab]();nav()}
+function met(p){var o=S;S=p;try{return{a:actual(),pl:planned(),T:rabTot(),R:rabReal(),w:cw()}}finally{S=o}}
+function proyek(){var ms=ORDER.map(function(id){return[ALL[id],met(ALL[id])]}),tot=0,av=0,late=0;ms.forEach(function(x){tot+=x[1].T;av+=x[1].a;if(x[1].a<x[1].pl-2)late++});
+return'<div class="grid"><div class="card"><div class="k">Jumlah proyek</div><div class="v">'+ms.length+'</div></div><div class="card"><div class="k">Total nilai RAB</div><div class="v">'+jt(tot)+'</div></div><div class="card"><div class="k">Rata-rata progres</div><div class="v">'+pc(av/ms.length)+'</div></div><div class="card"><div class="k">Perlu dikejar</div><div class="v '+(late?"bad":"ok")+'">'+late+' proyek</div></div></div><div class="sub">Ketuk proyek untuk membuka</div>'+ms.map(function(x){var p=x[0],m=x[1],dv=m.a-m.pl;return'<div class="card" onclick="setProj(\''+p.id+'\')" style="'+(p.id==CUR?"border-color:var(--pri);border-width:2px":"")+'"><div class="row"><b>'+esc(p.nama)+'</b><span class="tag '+(dv<-2?"bad":dv<0?"warn":"ok")+'">'+(dv<-2?"Terlambat":dv<0?"Waspada":"Sesuai jadwal")+'</span></div><div class="k">'+esc(p.lokasi)+' · minggu ke-'+m.w+'</div><div class="row" style="margin-top:6px"><span class="v" style="font-size:22px">'+pc(m.a)+'</span><span class="k">rencana '+pc(m.pl)+' · RAB '+jt(m.T)+'</span></div>'+bar(m.a,"a")+'</div>'}).join("")+fab("Proyek","addProj()")}
+function setProj(id){CUR=id;S=ALL[id];persist();go("home")}
+function addProj(){form("Proyek baru",[{l:"Nama proyek",v:""},{l:"Lokasi",v:""},{l:"Tanggal mulai",t:"date",v:"2026-11-23"}],function(v){if(!v[0])return;var id="p"+Date.now(),p=mk(id,v[0],v[1],v[2]||"2026-11-23",[],[],[0,0,0,0,0,0],[],[],[]);ALL[id]=p;ORDER.push(id);CUR=id;S=p;tab="home"})}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function scurve(){var x=function(w){return 30+w/WEEKS*300},y=function(p){return 170-p/100*150},w=cw(),hs=Object.assign({},S.hist),pl=[],ac=[x(0)+","+y(0)],dots="";hs[w]=actual();
+for(var i=0;i<=WEEKS;i++)pl.push(x(i)+","+y(plannedAt(i)));
+Object.keys(hs).map(Number).sort(function(a,b){return a-b}).forEach(function(k){if(k<=w){ac.push(x(k)+","+y(hs[k]));dots+='<circle cx="'+x(k)+'" cy="'+y(hs[k])+'" r="3" fill="var(--pri)"/>'}});
+var g=[0,25,50,75,100].map(function(p){return'<line x1="30" x2="330" y1="'+y(p)+'" y2="'+y(p)+'" stroke="var(--line)"/><text x="2" y="'+(y(p)+3)+'">'+p+'%</text>'}).join(""),xl=[0,4,8,12,17].map(function(i){return'<text x="'+(x(i)-5)+'" y="188">M'+i+'</text>'}).join(""),a=actual(),p=planned();
+return'<div class="card"><svg class="sc" viewBox="0 0 340 200" width="100%">'+g+xl+'<line x1="'+x(w)+'" x2="'+x(w)+'" y1="20" y2="170" stroke="var(--acc)" stroke-width="2"/><polyline points="'+pl.join(" ")+'" fill="none" stroke="var(--mut)" stroke-width="2" stroke-dasharray="5 4"/><polyline points="'+ac.join(" ")+'" fill="none" stroke="var(--pri)" stroke-width="3"/>'+dots+'</svg><div class="row" style="margin-top:6px"><span class="k">Garis putus: rencana</span><span class="k" style="color:var(--pri)">Garis tebal: realisasi</span></div></div><div class="grid"><div class="card"><div class="k">Realisasi</div><div class="v">'+pc(a)+'</div></div><div class="card"><div class="k">Rencana</div><div class="v">'+pc(p)+'</div></div></div><div class="k" style="margin:0 2px">'+(a<p?"Proyek tertinggal ":"Proyek lebih cepat ")+Math.abs(a-p).toFixed(1).replace(".",",")+'% dari rencana. Garis kuning = minggu ini. Titik realisasi tercatat setiap progres tugas diubah.</div>'}
+function fotos(){if(!DB||!AS)return'<div class="empty">Foto progres tersedia saat halaman dibuka di claude.ai dengan akun yang diundang.</div>';var L=(S.foto||[]).slice().sort(function(a,b){return b.id<a.id?-1:1});
+return(L.length?'<div class="ph">'+L.map(function(f){return'<div><img loading="lazy" src="/_blob/'+esc(f.aid)+'" alt=""><div class="k">'+esc(f.t)+(PROF[f.by]&&PROF[f.by].name?" · "+esc(PROF[f.by].name):"")+'</div><div style="font-size:13.5px">'+esc(f.k)+'</div></div>'}).join("")+'</div>':'<div class="empty">Belum ada foto. Ketuk tombol Foto untuk mengunggah.</div>')+fab("Foto","addFoto()")}
+function resize(file){return createImageBitmap(file).then(function(im){var s=Math.min(1,1280/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);return new Promise(function(r){c.toBlob(r,"image/jpeg",.8)})})}
+function addFoto(){form("Foto progres",[{l:"Foto (kamera atau galeri)",t:"file"},{l:"Keterangan",v:""},{l:"Tanggal",t:"date",v:"2026-11-20"}],function(v){if(!v[0])return;$("#us").textContent="Mengunggah foto...";resize(v[0]).then(function(b){return AS.upload(b)}).then(function(r){return DB.collection("foto").doc(String(Date.now())).set({aid:r.id,k:v[1],t:v[2],by:(ME&&ME.id)||"",p:S.id})}).then(render).catch(function(){$("#us").textContent="Foto gagal diunggah"})},true)}
+function exportCard(){return'<div class="sub">Ekspor laporan</div><div class="card"><div class="row" style="gap:10px"><button class="btn" style="flex:1" onclick="exXlsx()"'+(window.XLSX?"":" disabled")+'>Excel (.xlsx)</button><button class="btn g" style="flex:1" onclick="exPdf()"'+(window.jspdf?"":" disabled")+'>PDF</button></div><div class="k" style="margin-top:8px">Unduh laporan RAB, jadwal, laporan harian, material, dan tenaga kerja ke perangkat.</div></div>'}
+function dl(n,d){
+  try{
+    var blob = d instanceof Blob ? d : new Blob([d], {type: n.endsWith(".pdf") ? "application/pdf" : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+    var url = URL.createObjectURL(blob), a = document.createElement("a");
+    a.href = url; a.download = n; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){URL.revokeObjectURL(url)}, 1500);
+  }catch(e){alert("Gagal mengunduh file: "+e.message)}
+}
+function dsort(){return S.daily.slice().sort(function(a,b){return b.t<a.t?-1:1})}
+function exXlsx(){if(!window.XLSX)return;var wb=XLSX.utils.book_new(),add=function(n,a){XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(a),n)};
+add("RAB",[["Kategori","Uraian","Volume","Satuan","Harga satuan","Jumlah","Realisasi %","Biaya terealisasi"]].concat(S.rab.map(function(r){return[r.kat,r.nama,r.vol,r.sat,r.hrg,r.vol*r.hrg,r.real,r.vol*r.hrg*r.real/100]})));
+add("Jadwal",[["Tugas","Minggu mulai","Durasi (minggu)","Progres %"]].concat(S.tasks.map(function(t){return[t.nama,t.m,t.d,t.p]})));
+add("Laporan harian",[["Tanggal","Cuaca","Pekerja","Pekerjaan","Kendala"]].concat(dsort().map(function(d){return[d.t,d.c,d.w,d.u,d.k]})));
+add("Material",[["Material","Satuan","Rencana","Dipesan","Terpakai","Stok"]].concat(S.mat.map(function(m){return[m.nama,m.sat,m.rc,m.ord,m.pk,m.ord-m.pk]})));
+add("Tenaga kerja",[["Posisi","Jumlah","Upah per hari","Hari kerja","Biaya"]].concat(S.lab.map(function(l){return[l.per,l.jml,l.up,l.hr,l.jml*l.up*l.hr]})));
+dl("laporan-"+S.id+".xlsx",XLSX.write(wb,{type:"array",bookType:"xlsx"}))}
+function exPdf(){var J=window.jspdf&&window.jspdf.jsPDF;if(!J)return;var doc=new J(),y=34;doc.setFontSize(16);doc.text(S.nama,14,16);doc.setFontSize(10);doc.text(S.lokasi+" | Laporan per 20 November 2026",14,22);doc.text("Progres fisik "+pc(actual())+" (rencana "+pc(planned())+"), biaya terealisasi "+jt(rabReal())+" dari "+jt(rabTot()),14,28);
+function T(t,h,b){if(y>250){doc.addPage();y=14}doc.setFontSize(12);doc.text(t,14,y+4);doc.autoTable({startY:y+7,head:[h],body:b,styles:{fontSize:8},headStyles:{fillColor:[15,76,92]},margin:{left:14,right:14}});y=doc.lastAutoTable.finalY+8}
+T("RAB",["Uraian","Volume","Harga satuan","Jumlah","Real. %"],S.rab.map(function(r){return[r.nama,r.vol+" "+r.sat,rp(r.hrg),rp(r.vol*r.hrg),r.real]}));
+T("Jadwal",["Tugas","Minggu","Progres %"],S.tasks.map(function(t){return[t.nama,t.m+"-"+(t.m+t.d-1),t.p]}));
+T("Laporan harian terbaru",["Tanggal","Cuaca","Pekerja","Pekerjaan","Kendala"],dsort().slice(0,7).map(function(d){return[d.t,d.c,d.w,d.u,d.k]}));
+T("Material",["Material","Rencana","Dipesan","Terpakai","Stok"],S.mat.map(function(m){return[m.nama,m.rc+" "+m.sat,m.ord,m.pk,m.ord-m.pk]}));
+T("Tenaga kerja",["Posisi","Orang","Upah/hari","Hari","Biaya"],S.lab.map(function(l){return[l.per,l.jml,rp(l.up),l.hr,rp(l.jml*l.up*l.hr)]}));
+dl("laporan-"+S.id+".pdf",doc.output("arraybuffer"))}
+function profs(list){if(!UU)return;var ids=[];list.forEach(function(x){if(x.by&&!PROF[x.by]&&ids.indexOf(x.by)<0)ids.push(x.by)});if(!ids.length)return;UU.profiles(ids).then(function(m){ids.forEach(function(i){PROF[i]=m[i]||{name:""}});render()}).catch(function(){})}
+async function init(){if(!window.claude||!claude.use)return;
+try{UU=await claude.use("user");if(UU){ME=await UU.me();var ow=await UU.isOwner(),ce=await UU.canEdit();EDIT=ow||ce;ROLE=ow?"Manajer proyek":ce?"Pengawas":"Pelaksana"}}catch(e){}
+try{DL=await claude.use("downloads")}catch(e){}try{AS=await claude.use("assets")}catch(e){}try{DB=await claude.use("db")}catch(e){}
+render();if(!DB)return;
+var seeded=false;DB.collection("proyek").onSnapshot(function(q){var have={};q.docs.forEach(function(d){var id=d.id=="data"?"p1":d.id,x=d.data();have[id]=1;if(ALL[id])Object.keys(x).forEach(function(k){if(k!="id")ALL[id][k]=x[k]});else{ALL[id]=Object.assign({daily:[],foto:[],hist:{}},x,{id:id});ORDER.push(id)}});
+if(EDIT&&!seeded){seeded=true;ORDER.forEach(function(id){if(!have[id])DB.doc("proyek/"+pdoc(id)).set(core(ALL[id])).catch(function(){})})}persist();render()},function(){});
+DB.collection("laporan").onSnapshot(function(q){var g={},all=q.docs.map(function(d){return d.data()});all.forEach(function(x){var k=x.p||"p1";(g[k]=g[k]||[]).push(x)});Object.keys(g).forEach(function(k){if(ALL[k])ALL[k].daily=g[k]});profs(all);render()},function(){});
+DB.collection("foto").onSnapshot(function(q){var g={},all=q.docs.map(function(d){var x=d.data();x.id=d.id;return x});all.forEach(function(x){var k=x.p||"p1";(g[k]=g[k]||[]).push(x)});ORDER.forEach(function(id){ALL[id].foto=g[id]||[]});profs(all);render()},function(){})}
+init();
+render();
+if ("serviceWorker" in navigator && location.protocol !== "file:") {
+  window.addEventListener("load", function(){ navigator.serviceWorker.register("./service-worker.js").catch(function(e){console.warn("PWA service worker:",e)}); });
+}
+</script>
+</body>
+</html>

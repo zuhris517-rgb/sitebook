@@ -1,0 +1,27 @@
+{
+  "id": "./",
+  "name": "SiteBook – Manajemen Proyek",
+  "short_name": "SiteBook",
+  "description": "Aplikasi manajemen proyek konstruksi",
+  "lang": "id",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ecefea",
+  "theme_color": "#0f4c5c",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
